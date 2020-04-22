@@ -1,0 +1,265 @@
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>VISUALISATION DES DONNEES DE LA CEDEAO</title>
+        <meta charset="Utf-8">
+        <LINK REL=StyleSheet HREF="../css/style.css" TYPE="text/css" MEDIA=screen>
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <script type="text/javascript" src="../js/d3.js">
+        </script>
+        <style>
+           
+                .axis {
+                    font: 10px sans-serif;
+                }
+        
+                .axis path,
+                .axis line {
+                    fill: none;
+                    stroke: #000;
+                    shape-rendering: crispEdges;
+                }
+        
+                #tooltip {
+                    position: absolute;
+                    text-align: center;
+                    max-width: 70px;
+                    max-height: 60px;
+                    padding: 8px;
+                    border: none;
+                    border-radius: 8px;
+                    margin-top: -30px;
+                    font: 10px sans-serif;
+                    background: orange;
+                    color:black;
+                    pointer-events: none;
+                }
+                h2{
+                position:center;
+                }
+                span{
+                background-color:brown;
+                color:black;
+                }
+                #span1{
+                background-color:yellow;
+                color:black;
+                }
+                #span2{
+                background-color:blue;
+                color:black;
+                }
+            </style> 
+    </head>
+    <body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-sm-5">
+						<p>Bienvenu dans la sphere de visualisation avec D3JS
+						</p>
+                    </div>
+               </div>
+           </div>
+        </header>
+        <section class="navbar navbar-default navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="index.html" class="navbar-brand"><i class="fa fa-h-square"></i>Home</a></li>
+                        <li><a href="Problematique.html" class="smoothScroll">Problematique</a></li>
+                        <li><a href="Ecowas.html" class="smoothScroll">CEDEAO</a></li>
+                        <li><a href="data.html" class="smoothScroll">Donnees</a></li>
+                        <li><a href="viz.html" class="smoothScroll">Visualisation</a></li>
+                        <li><a href="cahier_avancement.html" class="smoothScroll">Cahier d'avancement</a></li>
+                        <li><a href="team.html">La Team</a></li>
+                    </ul>
+               </div>
+		   </div>
+        </section>
+		   <div id="mainarea">
+			   <div id="contentarea">
+                   <br/>               
+                   <div id="tooplate_menu">
+                    <h4><center>Taux d'Inflation de la monnaie</center></h4>
+                 <ul>
+                     <li><a href="inflation_annee.html">Par Annee</a></li>
+                     <li><a href="inflation_pays.html">Par Pays</a></li>
+                     <li><a href="inflation_heatmap.html">Via Heatmap</a></li>  
+					 <li><a href="inflationMoyenne.html">Moyenne</a></li>  
+
+                 </ul>    	
+             </div> <!-- end of tooplate_menu -->
+                <div id="viz">
+                    <br/>
+                    <br/>                   
+                    <div id="viz"> 
+                        <h4><marquee behavior="alternate">HeatMap du taux de croissance de la CEDEAO entre 2010 et 2016 </marquee></h2>
+                         Legende: &nbsp <span>Inflation Faible</span>	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span id="span1">Inflation moyenne</span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span id="span2">Inflation eleve</span>
+                        <br><br>
+                        <marquee>Survolez pour avoir un net appercu sur le taux d'inflation annuel en %</marquee>
+                       
+                        <div id="heatmap"></div>
+                        <div id="tooltip"></div>
+                        <script>
+                            //carte de chaleur
+                            //definition des dimension et de marges
+                            var margin = { top: 10, right: 100, bottom: 45, left: 10 },
+                                width = 915 - margin.left - margin.right,
+                                height = 380 - margin.top - margin.bottom,
+                                gridSize = Math.floor(width / 15),
+                                legendElementWidth = gridSize,
+                                buckets = 7,
+                                //tableaux contenant l'echelle de couleur,la legende,les days et times du heatmap
+                                colors = ["brown", "yellow", "blue"],
+                                niveau = ["Deficit Elevé ", "Excedent", "Deficit Faible et autres"],
+                            days = ["2016 ", "2015 ", "2014 ", "2013", "2012 ","2011","2010"];
+                            times = ["Benin", "Burkina Faso", "Cap vert", "Cote d'ivoire", "Gambie", "Ghana", "Guinée", "Guinée Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone","Togo"]
+                            //definition du svg
+                            var svg = d3.select("#heatmap")
+                                .append("svg")
+                                .attr("width", width + margin.left + margin.right)
+                                .attr("height", height + margin.top + margin.bottom)
+                                .append("g")
+                                .attr("tranform", "translate(" + margin.left + "," + margin.top + ")");
+                            //axe des days
+                            var dayslabel = svg.selectAll(".daylabel")
+                                .data(days)
+                                .enter()
+                                .append("text")
+                                .text(function (d) { return d })
+                                .attr("x", 0)
+                                .attr("y", function (d, i) { return i * 45 + 10; })
+                                .style("text-anchor", "end")
+                                .attr("transform", "translate(60," + (gridSize / 2.5) + ")")
+                                .attr("class", function (d, i) { return ((i > -2.5 && i <0 ) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+                            //axe des times
+                            var timesLabel = svg.selectAll(".timelabel")
+                                .data(times)
+                                .enter()
+                                .append("text")
+                                .text(function (d) { return d })
+                                .attr("x", function (d, i) { return i * gridSize; })
+                                .attr("y", 0)
+                                .style("text-anchor", "middle")
+                                .attr("transform", "translate(105, 15)")
+                                .attr("class", function (d, i) { return ((i >0 && i <= 15) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+                    
+                            //construction du heatmap
+                            //extraction des donnees a partir du fichier: donnee.tsv
+                            d3.tsv("inflation/inflation.tsv",
+                                function (d) {
+                                    return {
+                                        region: +d.region,
+                                        day: +d.day,
+                                        hour: +d.hour,
+                                        voix: +d.voix,
+                                    };
+                                },
+                                function (error, data) {
+                                    var colorScale = d3.scale.quantile()
+                                        .domain([d3.min(data, function (d) { return d.voix; }), buckets - 1, d3.max(data, function (d) { return d.voix; })])
+                                        .range(colors);
+                                    //ajout des rectangles et configuration de ces derniers
+                                    var cards = svg.selectAll(".hour")
+                                        .data(data)
+                                    cards.enter().append("rect")
+                                        .attr("x", function (d) { return (d.hour - 1) * gridSize + 65; })
+                                        .attr("y", function (d) { return (d.day - 1) * 45 + 20; })
+                                        .attr("rx", 1.5)
+                                        .attr("ry", 1.5)
+                                        .attr("width", gridSize)
+                                        .attr("height", 45)
+                                        .style("stroke", "white")
+                                        .style("stroke-opacity", 0.6)
+                                        .style("fill", function (d) { return colorScale(d.count) })
+                                        //ajout du tooltip avec l'evenement mouseover
+                                        .on("mouseover", function (d) {
+                                            div
+                                                .transition()
+                                                .duration(200)
+                                                .style("opacity", 0.9);
+                                            div
+                                                .html("taux d'inflation en(%) : " + d.voix)
+                                                .style("left", d3.event.pageX + 10 + "px")
+                                                .style("top", d3.event.pageY - 50 + "px");
+                                        })
+                                        .on("mouseout", function (d) {
+                                            div
+                                                .transition()
+                                                .duration(500)
+                                                .style("opacity", 0);
+                                        })
+                    
+                                    cards.transition().duration(2000)
+                                        .style("fill", function (d) { return colorScale(d.voix); });
+                    
+                                    cards.select("title").text(function (d) { return d.voix; });
+                    
+                                });
+                                /*
+                            //configuration du legende
+                            legend = svg.append("g");
+                            for (i = 0; i < 3; i++) {
+                                legend.append("rect")
+                                    .attr("x", 180 + 300 * i)
+                                    .attr("y", 200)
+                                    .attr("width", 100)
+                                    .attr("height", 30)
+                                    .attr("fill", colors[i]);
+                                legend.append("text")
+                                    .attr("x", 300 + 300 * i)
+                                    .attr("y", 220)
+                                    .text(niveau[i]);
+                            }
+                        */
+                            //div contenant le tooltip
+                            var div = d3
+                                .select("#tooltip")
+                                .attr("x", width - 600)
+                                .attr("y", 0)
+                                .style("opacity", 0);
+
+</script>
+<p>L’inflation annuelle moyen de la CEDEAO, qui était en dessous de 10% au cours de cette
+    dernière décennie et à 8% en 2015 et devrait augmenter à 12,1% en 2016 . Ce
+    résultat négatif compromet un peu plus les acquis obtenus depuis quelques années au
+    regard de l’objectif communautaire de maintenir le taux d’inflation dans les limites d’un
+    chiffre et en dessous de 5% à partir de 2019<br/><br/>
+    Cette hausse de plus de quatre points de pourcentage du taux d’inflation de la région en
+    2016 est en grande partie en rapport avec la forte augmentation de l’indice des prix au
+    Nigéria (15,4% contre 9,0% en 2015). Les effets directs et indirects de la forte dépréciation
+    du Naira ainsi que l’augmentation du prix de l’électricité et du carburant expliquent
+    principalement ce pic de l’inflation dans ce pays<br/><br/>
+
+
+    En outre, la hausse prolongée du niveau des prix au Ghana qui s’établirait à peu près à
+    17% en 2016 comme l’an dernier (17,2%) et 15,5% en 2014 contribue à entretenir
+    l’incertitude sur la réduction et la stabilisation du taux d’inflation moyen au sein de la
+    CEDEAO. Au-delà du cas spécifique de ces deux pays, sans doute conjoncturel, le fait le plus
+    marquant est l’hétérogénéité de la dynamique de l’inflation entre les deux zones
+    monétaires de la CEDEAO que sont l’UEMOA plus Cabo Verde et la ZMAO, ainsi que les
+    disparités entre les pays de cette dernière zone.<br/>
+    Deux tendances peuvent être mises en évidence. Tous les pays de l’UEMOA plus Cabo
+Verde ont des niveaux de prix qui se situeraient durablement en dessous de la cible de
+moyen terme de 5% .<br/>
+Le taux d’inflation moyen de l’UEMOA serait de 1,8% en
+2016, contre 1,2% en 2015, En revanche, aucun pays de la ZMAO n’aurait un taux
+d’inflation en dessous de la cible de 5%. L’inflation moyenne de la ZMAO se situerait à
+14,2% en 2016 contre 9,4% en 2015.Toutefois, chose encourageante, presque tous les pays
+de cette seconde zone ont des taux d’inflation qui convergent en dessous du seuil de court
+terme de 10%. Le Nigéria, au regard de sa situation économique actuelle, et le Ghana,
+seraient sans doute les seuls à être en 2017 en dehors de cette zone de convergence du
+taux d’inflation. Cependant, la persistance des velléités inflationnistes en
+Sierra Leone, en Guinée et au Libéria appelle à la vigilance.<br/>
+En définitive, le suivi de l’évolution de l’indice des prix revêt un intérêt fondamental au
+regard de son impact sur le niveau de vie des populations et sur la croissance économique.
+
+    </p>
+                        
+                   </div>	
+                </div>
+            </div>	
+    </body>	
+</html>	

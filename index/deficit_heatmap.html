@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>VISUALISATION DES DONNEES DE LA CEDEAO</title>
+        <meta charset="Utf-8">
+        <LINK REL=StyleSheet HREF="../css/style.css" TYPE="text/css" MEDIA=screen>
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <script type="text/javascript" src="../js/d3.js">
+        </script>
+        <style>
+            body{
+            background-color:green;
+            }
+                .axis {
+                    font: 10px sans-serif;
+                }
+        
+                .axis path,
+                .axis line {
+                    fill: none;
+                    stroke: #000;
+                    shape-rendering: crispEdges;
+                }
+        
+                #tooltip {
+                    position: absolute;
+                    text-align: center;
+                    max-width: 70px;
+                    max-height: 60px;
+                    padding: 8px;
+                    border: none;
+                    border-radius: 8px;
+                    margin-top: -30px;
+                    font: 10px sans-serif;
+                    background: purple;
+                    color: white;
+                    pointer-events: none;
+                }
+                h2{
+                position:center;
+                }
+                span{
+                background-color:brown;
+                color:black;
+                }
+                #span1{
+                background-color:yellow;
+                color:black;
+                }
+                #span2{
+                background-color:blue;
+                color:black;
+                }
+            </style> 
+    </head>
+    <body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-sm-5">
+						<p><marquee behavior="alternate">Bienvenu dans la sphere de visualisation avec D3JS</marquee>
+						</p>
+                    </div>
+               </div>
+           </div>
+        </header>
+        <section class="navbar navbar-default navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="index.html" class="navbar-brand"><i class="fa fa-h-square"></i>Home</a></li>
+                        <li><a href="Problematique.html" class="smoothScroll">Problematique</a></li>
+                        <li><a href="Ecowas.html" class="smoothScroll">CEDEAO</a></li>
+                        <li><a href="data.html" class="smoothScroll">Donnees</a></li>
+                        <li><a href="viz.html" class="smoothScroll">Visualisation</a></li>
+                        <li><a href="cahier_avancement.html" class="smoothScroll">Cahier d'avancement</a></li>
+                        <li><a href="team.html">La Team</a></li>
+                    </ul>
+               </div>
+		   </div>
+        </section>
+		   <div id="mainarea">
+			   <div id="contentarea">
+                <div id="tooplate_menu">
+                    <h4><center>Deficit Budgetaire</center></h4>
+                 <ul>
+                     <li><a href="deficit_annee.html">Par Annee</a></li>
+                     <li><a href="deficit_heatmap.html">Via Heatmap</a></li>  
+                 </ul>    	
+             </div> <!-- end of tooplate_menu -->
+                    <br/>
+                    <br/>
+                    <h4>Visualisation du deficit budgetaire des pays de la CEDEAO entre 2011 et 2016</h4>                   
+                    <br/>
+                    <div id="viz"> 
+                        <h2><marquee behavior="alternate">HeatMap du deficit budgetaire de la CEDEAO </marquee></h2>
+                         Legende: &nbsp <span>deficit faible</span>	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span id="span1">Faibe excedent</span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span id="span2">Excedent eleve</span>
+                        <br><br>
+                        <marquee>Survolez pour avoir un net appercu du deficit budgetaire sur le PIB en %</marquee>
+                       
+                        <div id="heatmap"></div>
+                        <div id="tooltip"></div>
+                        <script>
+                            //carte de chaleur
+                            //definition des dimension et de marges
+                            var margin = { top: 10, right: 100, bottom: 45, left: 10 },
+                                width = 915 - margin.left - margin.right,
+                                height = 400 - margin.top - margin.bottom,
+                                gridSize = Math.floor(width / 15),
+                                legendElementWidth = gridSize,
+                                buckets = 7,
+                                //tableaux contenant l'echelle de couleur,la legende,les days et times du heatmap
+                                colors = ["brown", "yellow", "blue"],
+                                niveau = ["Deficit Elevé ", "Excedent", "Deficit Faible et autres"],
+                            days = ["2016 ", "2015 ", "2014 ", "2013", "2012 ","2011","2010"];
+                            times = ["Benin", "Burkina Faso", "Cap vert", "Cote d'ivoire", "Gambie", "Ghana", "Guinée", "Guinée Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone","Togo"]
+                            //definition du svg
+                            var svg = d3.select("#heatmap")
+                                .append("svg")
+                                .attr("width", width + margin.left + margin.right)
+                                .attr("height", height + margin.top + margin.bottom)
+                                .append("g")
+                                .attr("tranform", "translate(" + margin.left + "," + margin.top + ")");
+                            //axe des days
+                            var dayslabel = svg.selectAll(".daylabel")
+                                .data(days)
+                                .enter()
+                                .append("text")
+                                .text(function (d) { return d })
+                                .attr("x", 0)
+                                .attr("y", function (d, i) { return i * 45 + 10; })
+                                .style("text-anchor", "end")
+                                .attr("transform", "translate(60," + (gridSize / 2.5) + ")")
+                                .attr("class", function (d, i) { return ((i > -2.5 && i <0 ) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+                            //axe des times
+                            var timesLabel = svg.selectAll(".timelabel")
+                                .data(times)
+                                .enter()
+                                .append("text")
+                                .text(function (d) { return d })
+                                .attr("x", function (d, i) { return i * gridSize; })
+                                .attr("y", 0)
+                                .style("text-anchor", "middle")
+                                .attr("transform", "translate(105, 15)")
+                                .attr("class", function (d, i) { return ((i >0 && i <= 15) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+                    
+                            //construction du heatmap
+                            //extraction des donnees a partir du fichier: deficit.tsv
+                            d3.tsv("deficit/deficit.tsv",
+                                function (d) {
+                                    return {
+                                        region: +d.region,
+                                        day: +d.day,
+                                        hour: +d.hour,
+                                        voix: +d.voix,
+                                    };
+                                },
+                                function (error, data) {
+                                    var colorScale = d3.scale.quantile()
+                                        .domain([d3.min(data, function (d) { return d.voix; }), buckets - 1, d3.max(data, function (d) { return d.voix; })])
+                                        .range(colors);
+                                    //ajout des rectangles et configuration de ces derniers
+                                    var cards = svg.selectAll(".hour")
+                                        .data(data)
+                                    cards.enter().append("rect")
+                                        .attr("x", function (d) { return (d.hour - 1) * gridSize + 65; })
+                                        .attr("y", function (d) { return (d.day - 1) * 45 + 20; })
+                                        .attr("rx", 1.5)
+                                        .attr("ry", 1.5)
+                                        .attr("width", gridSize)
+                                        .attr("height", 45)
+                                        .style("stroke", "white")
+                                        .style("stroke-opacity", 0.6)
+                                        .style("fill", function (d) { return colorScale(d.count) })
+                                        //ajout du tooltip avec l'evenement mouseover
+                                        .on("mouseover", function (d) {
+                                            div
+                                                .transition()
+                                                .duration(200)
+                                                .style("opacity", 0.9);
+                                            div
+                                                .html("deficit budgetaire/PIB en(%) : " + d.voix)
+                                                .style("left", d3.event.pageX + 10 + "px")
+                                                .style("top", d3.event.pageY - 50 + "px");
+                                        })
+                                        .on("mouseout", function (d) {
+                                            div
+                                                .transition()
+                                                .duration(500)
+                                                .style("opacity", 0);
+                                        })
+                    
+                                    cards.transition().duration(2000)
+                                        .style("fill", function (d) { return colorScale(d.voix); });
+                    
+                                    cards.select("title").text(function (d) { return d.voix; });
+                    
+                                });
+                                /*
+                            //configuration du legende
+                            legend = svg.append("g");
+                            for (i = 0; i < 3; i++) {
+                                legend.append("rect")
+                                    .attr("x", 180 + 300 * i)
+                                    .attr("y", 200)
+                                    .attr("width", 100)
+                                    .attr("height", 30)
+                                    .attr("fill", colors[i]);
+                                legend.append("text")
+                                    .attr("x", 300 + 300 * i)
+                                    .attr("y", 220)
+                                    .text(niveau[i]);
+                            }
+                        */
+                            //div contenant le tooltip
+                            var div = d3
+                                .select("#tooltip")
+                                .attr("x", width - 600)
+                                .attr("y", 0)
+                                .style("opacity", 0);
+                            
+
+
+
+
+</script>
+<p>La situation des finances publiques de la CEDEAO s’est en général détériorée ces dernières
+    années, ce qui risque de compromettre les efforts en matière de gestion
+    macroéconomique entamés depuis 2000.<br/> Le déficit public moyen en proportion du PIB de
+    la CEDEAO devrait se dégrader davantage en 2016 à 4,5% alors qu’il était de 4% en 2015,
+    contre 2,2% en moyenne entre 2012 et 2014. Au cours de cette
+    dernière période, seuls le Cabo Verde, la Gambie, le Ghana, le Sénégal et le Togo avaient
+    des ratios de déficit public nettement supérieurs au seuil maximal communautaire de 3%
+    fixé dans le dispositif de convergence macroécoomique .
+    Par contre, en 2015, seul le Burkina (2,3%) la Côte d’Ivoire (3,0%) et le Mali (1,8%) ont
+    enregistré des ratios de déficit inférieur à cette cible. Il n’est pas prévu en 2016 une
+    amélioration du compte public des pays de la région, à l’exception notable de la Guinée et
+    de la Guinée Bissau où le ratio s’établirait respectivement à 1,9% et 2,1% contre 8,8% et
+    7,1% un an auparavant. En revanche, le résultat positif enregistré par le Mali et la Côte
+    d’Ivoire en 2015 ferait rapidement suite à une situation négative en 2016 avec des ratios
+    respectifs de 4,3% et 4%.<br/>
+    En outre, l’analyse de ce ratio permet de se rendre compte de certaines évolutions
+    importantes, en rupture avec la tendance historique récente. Il s’agit notamment de:<br/>
+    - la détérioration rapide du déficit public du Bénin, qui était avant 2015 l’un des
+    pays modèles en matière de discipline budgétaire. <br>
+    Le ratio du déficit public était
+    en moyenne à peine de 1% entre 2006-2014 avant de croître rapidement à 7,5%
+    en 2015. Le niveau attendu en 2016 est de 4,2% ;<br/>
+    - la constance dans la rigueur budgétaire du Burkina Faso où le ratio du déficit est
+    durablement établi en dessous du seuil de 3% depuis au moins une décennie ;<br/>
+    - la détérioration continue du déficit public de la Gambie qui devrait atteindre
+    9,8% et même 12,9% en 2017 après un niveau de 6,5% en 2015 et 7,6% entre
+    2012-2014 ;<br/>
+    - la détérioration attendue du compte public du Libéria, avec un ratio en nette
+    hausse à 11,4% en 2015 et à 7,1% en 2016 ;<br/>
+    - enfin, la détérioration des finances publiques du Nigéria qui devrait atteindre
+    3,8% en 2015 et 4,6% en 2016, en rupture avec la performance passée de ce pays
+    en matière budgétaire.
+    <br/>
+    En somme, les difficultés rencontrées dans le respect de la cible du déficit public contenu
+    dans le dispositif de convergence macroéconomique de la CEDEAO sont en grande partie
+    liées au rôle déterminant de la dépense publique comme source de la croissance. En effet,
+    il est établi une relation positive et significative (coefficient de corrélation de 0,93) entre 
+    les dépenses de l’Etat et la croissance économique de la CEDEAO .<br/>
+     Toutefois,
+    l’impact positif de ces dépenses sur la croissance dépend de leur affectation. Les dépenses
+    publiques sont plus efficaces lorsqu’elles sont principalement allouées à l’investissement
+    dont l’effet stimulant de la croissance économique est théoriquement et empiriquement
+    établi. Ainsi, la relation positive et fortement significative (coefficient de corrélation de
+    0,94) dans le cas de la CEDEAO confirme le rôle de l’investissement en tant que levier de
+    croissance</p>
+                        
+                   </div>	
+                </div>
+            </div>	
+    </body>	
+</html>	

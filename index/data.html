@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>VISUALISATION DES DONNEES DE LA CEDEAO</title>
+        <meta charset="Utf-8">
+        <LINK REL=StyleSheet HREF="../css/style.css" TYPE="text/css" MEDIA=screen>
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
+    </head>
+    <body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-sm-5">
+						<p>Bienvenu dans la sphere de visualisation avec D3JS
+						</p>
+                    </div>
+               </div>
+           </div>
+        </header>
+        <section class="navbar navbar-default navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="index.html" class="navbar-brand"><i class="fa fa-h-square"></i>Home</a></li>
+                        <li><a href="Problematique.html" class="smoothScroll">Problematique</a></li>
+                        <li><a href="Ecowas.html" class="smoothScroll">CEDEAO</a></li>
+                        <li><a href="data.html" class="smoothScroll">Donnees</a></li>
+                        <li><a href="viz.html" class="smoothScroll">Visualisation</a></li>
+                        <li><a href="cahier_avancement.html" class="smoothScroll">Cahier d'avancement</a></li>
+                        <li><a href="team.html">La Team</a></li>
+                    </ul>
+               </div>
+		   </div>
+        </section>
+       <div id="page">
+		   <div id="mainarea">
+			   <div id="contentarea">
+ 
+                   <br/>
+                   <h4><center>Les donnees economiques de la CEDEAO utilisees pour le projet</center></h4>
+                   <h4>Le Produit Interieur Brut </h4>
+                   <p>Puisque nous avons frequemment utilise le PIB pour le calcul des ratio etudie, 
+                       nous avons choisi de l'explique au prealable.<br/>
+                       Le Produit Interieur Brut (PIB) est un indicateur economique qui permet de quantifier la 
+                       valeur totale de la production de richesse annuelle effectuee 
+                       par les agents economiques residant a l'inteieur d'un territoire donne .<br/>
+                    Il reflete donc l'activite economique interne d'un pays et sa variation d'une periode a 
+                    une autre permet de mesurer son taux de croissance economique</p>
+                   <h4>La croissance annuelle</h4> 
+                   <p>
+                       La croissance économique correspond à l’accroissement continu 
+                       de la quantité des biens et des services produits annuellement 
+                       dans un pays ou dans une aire géographique.
+                       C’est la richesse créée par les activités de production sur une 
+                       longue période.
+                       La croissance économique se traduit par l’augmentation durable de l'activité économique d'un pays, constatée à travers l'évolution des prix, de la production et des revenus.
+                       Dans la plupart des statistiques internationales, la croissance 
+                       économique est évaluée par le Produit Intérieur Brut (PIB). 
+                       Cette richesse est égale à la valeur de tous les biens et 
+                       services produits à l'intérieur d'un pays.
+                       A savoir : le Produit National Brut (PNB) est un autre indicateur 
+                       de la croissance économique. Il quantifie la production de biens 
+                       et services marchands créés par un pays sur le sol national ou à 
+                       l'étranger durant une période donnée.
+                       Contrairement à l’expansion, parfois fugace, la croissance 
+                       économique est un phénomène durable.<br/>
+                       <center><img src="../images/croissance.PNG" height="410" width="730"alt="Croissance annuelle"/></center>
+                   </p>
+                   <h4>Le deficit budgetaire</h4>
+                   <p>
+                       Le déficit budgétaire est la situation dans laquelle les recettes 
+                       de l’État (hors remboursement d’emprunt) sont inférieures à ses 
+                       dépenses (hors emprunt) au cours d’une année. C’est donc un solde 
+                       négatif.
+                       Il se différencie du déficit public, car il n’englobe pas le solde 
+                       des recettes et des dépenses des autres administrations publiques 
+                       (collectivités territoriales et organismes de sécurité sociale notamment).
+                       Le déficit budgétaire se traduit par des emprunts nouveaux que 
+                       l’État doit contracter au cours de l’année. Si l’État doit 
+                       emprunter pour se procurer des liquidités nécessaires pour couvrir 
+                       les emprunts antérieurs arrivés à échéance, on parle alors d’effet 
+                       "boule de neige".
+                       Selon les économistes, le déficit budgétaire peut jouer différents 
+                       rôles. Pour Keynes, il peut stimuler la croissance et l’emploi dans 
+                       une économie en récession. En revanche, les libéraux insistent sur 
+                       les effets néfastes de l’accroissement de la dette publique.<br/>
+                       <center><img src="../images/deficit.PNG" height="410" width="720"alt="deficit budgetaire"/></center>
+                   </p>
+                   <h4>Inflation en moyenne annuelle</h4>
+                   <p> 
+                       L'inflation est la perte du pouvoir d'achat de la monnaie qui se 
+                       traduit par une augmentation générale et durable des prix. Il 
+                       s'agit d'un phénomène persistant qui fait monter l'ensemble des 
+                       prix, et auquel se superposent des variations sectorielles des prix.
+                       La monnaie étant l'étalon des valeurs, la variation de sa propre 
+                       valeur n'est pas directement mesurable ; on l'évalue à partir des 
+                       variations des prix à la consommation des biens et services, mesurée 
+                       à quantité et qualité égales. L'inflation doit donc être distinguée 
+                       de l'augmentation du coût de la vie car elle ne prend pas en compte 
+                       la variation des quantités achetées en réponse à l'évolution des prix.<br/>
+                       <center><img src="../images/inflation.PNG" height="400" width="720"alt="Inflation en moyenne"/></center>
+                   </p>
+                   <h4>Ratio Dettes Publiques sur PIB</h4>
+                   <p> 
+                       Le ratio dette publique sur PIB mesure la dette brute des 
+                       administrations publiques d'un pays en pourcentage du produit intérieur 
+                       brut. Il constitue un indicateur clé pour la viabilité des finances 
+                       publiques. La dette est la somme des catégories d'engagements suivantes 
+                       (le cas échéant) : numéraire et dépôts, titres de créance, crédits, 
+                       droits sur les régimes d’assurance, de retraite et de garanties 
+                       normalisées, et autres comptes à payer. Les variations de la dette 
+                       publique au cours du temps sont principalement dûs à l'impact des 
+                       déficits publics passés.<br/>
+                    <center><img src="../images/dette_publique.PNG" height="400" width="720"alt="dette publique sur pib"/></center>
+                   </p>
+                   <h4>Ratio Recettes Ficales sur PIB</h4>
+                   <p>  
+                       Les recettes fiscales désignent les recettes provenant des impôts 
+                       sur le revenu et les bénéfices, des cotisations de sécurité sociale, 
+                       des taxes prélevées sur les biens et les services, des prélèvements 
+                       sur les salaires, des impôts sur le patrimoine et des droits de 
+                       mutation, ainsi que d'autres impôts et taxes. Les recettes fiscales 
+                       totales en pourcentage du PIB indiquent la part de la production d'un 
+                       pays qui est prélevée par l'État sous forme d'impôts. Elles peuvent 
+                       donc être considérées comme un indicateur du contrôle exercé par l'État 
+                       sur les ressources produites par l'économie. La pression fiscale 
+                       correspond au montant total des recettes fiscales recouvrées, exprimé en 
+                       pourcentage du PIB. Cet indicateur se rapporte à l'administration dans 
+                       son ensemble (tous niveaux d'administration).<br/>
+                    <center><img src="../images/recettes_fiscales.PNG" height="400" width="720"alt="recettes fiscales sur pib"/></center>
+                   </p>
+       <h4>Ratio Masse salariale sur Recettes Ficales </h4>
+       <p> 
+           la masse salariale est le cumul des rémunérations brutes des salariés 
+           de l'établissement (hors cotisations patronales). Les rémunérations 
+           correspondent aux salaires et primes des salariés au cours de l'année 
+           d'exercice. <br/>
+        <center> <img src="../images/masse_salariale.PNG" height="400" width="720"alt="masse salariale sur recettes fiscales"/></center>
+
+       </p>
+       <h4>Ratio Recettes Totales et Dons sur PIB</h4>
+       <p> 
+           Les recettes de l’État proviennent de deux sources :
+           les recettes fiscales c’est-à-dire les impôts, qui forment 
+           plus de 95 % des recettes totales.
+           les recettes non fiscales. Ce sont principalement les revenus du 
+           patrimoine de l’État, les revenus de l’activité industrielle et 
+           commerciale de l’État, les rémunérations des services rendus 
+           (redevance audiovisuelle par exemple) et les emprunts contractés par 
+           l’État. <br/>
+        <center><img src="../images/recettes_totales.PNG" height="400" width="720"alt="recettes totales et dons sur pib"/></center>
+       </p>
+       <h4>Dépenses totales et prêts nets sur PIB </h4><br/>
+       <p> 
+        Les depenses de l'Etat represensent la maniere dont l'Etat utilise ses 
+        recettes fiscales et non fiscales.<br/>
+        Les prets nets designe une operation qui consiste pour un preteur a remettre 
+        des fonds a un beneficiaire , en contrepartie du versement d'un interet 
+        et d un engagemement de remboursement de ces fonds
+         
+    </p>
+    <center><img src="../images/depenses_totales.PNG" height="400" width="720"alt="depenses totales et prets sur pib"/></center>
+
+       
+				   
+	            </div>
+	        </div>
+        </div>
+    </body>
+</html>	

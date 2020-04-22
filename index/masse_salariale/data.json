@@ -1,0 +1,17 @@
+[
+{"pays":1, "nom":"Benin", "part":3},
+{"pays":2, "nom":"Burkina Faso", "part":6.6},
+{"pays":3, "nom":"Cap Vert", "part":4.2},
+{"pays":4, "nom":"Cote d'Ivoire", "part":4.07},
+{"pays":5, "nom":"Gambie", "part":4.3},
+{"pays":6, "nom":"Ghana", "part":5.9},
+{"pays":7, "nom":"Guinee", "part":5.9},
+{"pays":8, "nom":"Guinee Bissau", "part":5.9},
+{"pays":9, "nom":"Liberia", "part":5.9},
+{"pays":10, "nom":"Mali", "part":5.9},
+{"pays":11, "nom":"Niger", "part":5.9},
+{"pays":12, "nom":"Nigeria", "part":5.9},
+{"pays":13, "nom":"Senegal", "part":5.9},
+{"pays":14, "nom":"Sierra Leone", "part":5.9},
+{"pays":15, "nom":"Togo", "part":5.9}
+]

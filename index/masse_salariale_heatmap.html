@@ -1,0 +1,236 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>VISUALISATION DES DONNEES DE LA CEDEAO</title>
+        <meta charset="Utf-8">
+        <LINK REL=StyleSheet HREF="../css/style.css" TYPE="text/css" MEDIA=screen>
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <script type="text/javascript" src="../js/d3.js">
+        </script>
+        <style>
+            
+                .axis {
+                    font: 10px sans-serif;
+                }
+        
+                .axis path,
+                .axis line {
+                    fill: none;
+                    stroke: #000;
+                    shape-rendering: crispEdges;
+                }
+        
+                #tooltip {
+                    position: absolute;
+                    text-align: center;
+                    max-width: 70px;
+                    max-height: 60px;
+                    padding: 8px;
+                    border: none;
+                    border-radius: 8px;
+                    margin-top: -30px;
+                    font: 10px sans-serif;
+                    background: purple;
+                    color:black;
+                    pointer-events: none;
+                }
+                h2{
+                position:center;
+                }
+                span{
+                background-color:brown;
+                color:black;
+                }
+                #span1{
+                background-color:yellow;
+                color:black;
+                }
+                #span2{
+                background-color:blue;
+                color:black;
+                }
+            </style> 
+    </head>
+    <body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-sm-5">
+						<p>Bienvenu dans la sphere de visualisation avec D3JS
+						</p>
+                    </div>
+               </div>
+           </div>
+        </header>
+        <section class="navbar navbar-default navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="index.html" class="navbar-brand"><i class="fa fa-h-square"></i>Home</a></li>
+                        <li><a href="Problematique.html" class="smoothScroll">Problematique</a></li>
+                        <li><a href="Ecowas.html" class="smoothScroll">CEDEAO</a></li>
+                        <li><a href="data.html" class="smoothScroll">Donnees</a></li>
+                        <li><a href="viz.html" class="smoothScroll">Visualisation</a></li>
+                        <li><a href="cahier_avancement.html" class="smoothScroll">Cahier d'avancement</a></li>
+                        <li><a href="team.html">La Team</a></li>
+                    </ul>
+               </div>
+		   </div>
+        </section>
+		   <div id="mainarea">
+			   <div id="contentarea">
+                   <br/>               
+                   <div id="tooplate_menu">
+                    <h4><center>Ratio de masse salariale sur recettes fiscales  en % </center></h4>
+                 <ul>
+                     <li><a href="masse_salariale_annee.html">Par Annee</a></li>
+                     <li><a href="masse_salariale_pays.html">Par Pays</a></li>
+                     <li><a href="masse_salariale_heatmap.html">Via Heatmap</a></li>  
+                 </ul>    	
+             </div> <!-- end of tooplate_menu -->
+                <div id="viz">
+                    <br/>
+                                     
+                    <br/>
+                    <div id="viz"> 
+                        <h4><marquee behavior="alternate">HeatMap de la masse salariale de la CEDEAO                                </marquee></h2>
+                         Legende: &nbsp <span>Ratio Faible</span>	
+                         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+                         <span id="span1">Ratio moyen</span>
+                         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+                         <span id="span2">Ratio eleve</span>
+                        <br><br>
+                        <marquee>Survolez pour avoir un net appercu sur le ratio de masse salariale sur recetttes fiscales annuel en %</marquee>
+                       
+                        <div id="heatmap"></div>
+                        <div id="tooltip"></div>
+                        <script>
+                            //carte de chaleur
+                            //definition des dimension et de marges
+                            var margin = { top: 10, right: 100, bottom: 45, left: 10 },
+                                width = 915 - margin.left - margin.right,
+                                height = 400 - margin.top - margin.bottom,
+                                gridSize = Math.floor(width / 15),
+                                legendElementWidth = gridSize,
+                                buckets = 7,
+                                //tableaux contenant l'echelle de couleur,la legende,les days et times du heatmap
+                                colors = ["brown", "yellow", "blue"],
+                                niveau = ["Deficit Elevé ", "Excedent", "Deficit Faible et autres"],
+                            days = ["2015 ", "2014 ", "2013", "2012 ","2011","2010"];
+                            times = ["Benin", "Burkina Faso", "Cap vert", "Cote d'ivoire", "Gambie", "Ghana", "Guinée", "Guinée Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone","Togo"]
+                            //definition du svg
+                            var svg = d3.select("#heatmap")
+                                .append("svg")
+                                .attr("width", width + margin.left + margin.right)
+                                .attr("height", height + margin.top + margin.bottom)
+                                .append("g")
+                                .attr("tranform", "translate(" + margin.left + "," + margin.top + ")");
+                            //axe des days
+                            var dayslabel = svg.selectAll(".daylabel")
+                                .data(days)
+                                .enter()
+                                .append("text")
+                                .text(function (d) { return d })
+                                .attr("x", 0)
+                                .attr("y", function (d, i) { return i * 45 + 10; })
+                                .style("text-anchor", "end")
+                                .attr("transform", "translate(60," + (gridSize / 2.5) + ")")
+                                .attr("class", function (d, i) { return ((i > -2.5 && i <0 ) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+                            //axe des times
+                            var timesLabel = svg.selectAll(".timelabel")
+                                .data(times)
+                                .enter()
+                                .append("text")
+                                .text(function (d) { return d })
+                                .attr("x", function (d, i) { return i * gridSize; })
+                                .attr("y", 0)
+                                .style("text-anchor", "middle")
+                                .attr("transform", "translate(105, 15)")
+                                .attr("class", function (d, i) { return ((i >0 && i <= 15) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+                    
+                            //construction du heatmap
+                            //extraction des donnees a partir du fichier: donnee.tsv
+                            d3.tsv("masse_salariale/masse_salariale.tsv",
+                                function (d) {
+                                    return {
+                                        region: +d.region,
+                                        day: +d.day,
+                                        hour: +d.hour,
+                                        voix: +d.voix,
+                                    };
+                                },
+                                function (error, data) {
+                                    var colorScale = d3.scale.quantile()
+                                        .domain([d3.min(data, function (d) { return d.voix; }), buckets - 1, d3.max(data, function (d) { return d.voix; })])
+                                        .range(colors);
+                                    //ajout des rectangles et configuration de ces derniers
+                                    var cards = svg.selectAll(".hour")
+                                        .data(data)
+                                    cards.enter().append("rect")
+                                        .attr("x", function (d) { return (d.hour - 1) * gridSize + 65; })
+                                        .attr("y", function (d) { return (d.day - 1) * 45 + 20; })
+                                        .attr("rx", 1.5)
+                                        .attr("ry", 1.5)
+                                        .attr("width", gridSize)
+                                        .attr("height", 45)
+                                        .style("stroke", "white")
+                                        .style("stroke-opacity", 0.6)
+                                        .style("fill", function (d) { return colorScale(d.count) })
+                                        //ajout du tooltip avec l'evenement mouseover
+                                        .on("mouseover", function (d) {
+                                            div
+                                                .transition()
+                                                .duration(200)
+                                                .style("opacity", 0.9);
+                                            div
+                                                .html("masse salariale/recettes fiscales en(%) : " + d.voix)
+                                                .style("left", d3.event.pageX + 10 + "px")
+                                                .style("top", d3.event.pageY - 50 + "px");
+                                        })
+                                        .on("mouseout", function (d) {
+                                            div
+                                                .transition()
+                                                .duration(500)
+                                                .style("opacity", 0);
+                                        })
+                    
+                                    cards.transition().duration(2000)
+                                        .style("fill", function (d) { return colorScale(d.voix); });
+                    
+                                    cards.select("title").text(function (d) { return d.voix; });
+                    
+                                });
+                                /*
+                            //configuration du legende
+                            legend = svg.append("g");
+                            for (i = 0; i < 3; i++) {
+                                legend.append("rect")
+                                    .attr("x", 180 + 300 * i)
+                                    .attr("y", 200)
+                                    .attr("width", 100)
+                                    .attr("height", 30)
+                                    .attr("fill", colors[i]);
+                                legend.append("text")
+                                    .attr("x", 300 + 300 * i)
+                                    .attr("y", 220)
+                                    .text(niveau[i]);
+                            }
+                        */
+                            //div contenant le tooltip
+                            var div = d3
+                                .select("#tooltip")
+                                .attr("x", width - 600)
+                                .attr("y", 0)
+                                .style("opacity", 0);
+                            
+
+
+
+
+</script>
+                        
+                   </div>	
+                </div>
+            </div>	
+    </body>	
+</html>	
